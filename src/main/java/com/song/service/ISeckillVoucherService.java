@@ -1,5 +1,6 @@
 package com.song.service;
 
+import com.song.dto.Result;
 import com.song.entity.SeckillVoucher;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-01-04
  */
 public interface ISeckillVoucherService extends IService<SeckillVoucher> {
+
 
 }

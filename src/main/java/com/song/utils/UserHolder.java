@@ -1,6 +1,7 @@
 package com.song.utils;
 
 import com.song.dto.UserDTO;
+import com.song.entity.User;
 
 public class UserHolder {
     private static final ThreadLocal<UserDTO> tl = new ThreadLocal<>();
