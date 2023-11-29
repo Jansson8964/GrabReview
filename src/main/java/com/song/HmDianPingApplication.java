@@ -16,9 +16,4 @@ public class HmDianPingApplication {
     public static void main(String[] args) {
         SpringApplication.run(HmDianPingApplication.class, args);
     }
-
-//    @Bean
-//    public MessageConverter jacksonMessageConvertor(ObjectMapper objectMapper) {
-//        return new Jackson2JsonMessageConverter(objectMapper);
-//    }
 }

@@ -42,7 +42,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result sendCode(String phone, HttpSession session) {
-        // TODO 发送短信验证码并保存验证码
         // 1. validate phone
         if (RegexUtils.isPhoneInvalid(phone)) {
             // 2. if phone is invalid, return error message
