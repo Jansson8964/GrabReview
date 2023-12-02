@@ -29,14 +29,7 @@ import static com.song.utils.RedisConstants.*;
 import static com.song.utils.RedisConstants.LOGIN_USER_TTL;
 import static com.song.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 
-/**
- * <p>
- * 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
