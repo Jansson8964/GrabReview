@@ -44,12 +44,36 @@ public class BlogController {
     public Result queryHotBlog(@RequestParam(value = "current", defaultValue = "1") Integer current) {
         return blogService.queryHotBlog(current);
     }
+
     @GetMapping("/{id}")
     public Result queryBlogById(@PathVariable("id") Long id) {
         return blogService.queryBlogById(id);
     }
+
     @GetMapping("/likes/{id}")
     public Result queryBlogLikes(@PathVariable("id") Long id) {
         return blogService.queryBlogLikes(id);
+    }
+
+    // query user by id
+//    @GetMapping("/{id}")
+//    public Result queryUserById(@RequestParam("id") Long id) {
+//        return userService.queryUserById(id);
+//    }
+
+    // query blog by user id
+    @GetMapping("/of/user")
+    public Result queryBlogByUserId(
+            @RequestParam(value = "current", defaultValue = "1") Integer current,
+            @RequestParam("id") Long id) {
+        Page<Blog> page = blogService.query()
+                .eq("user_id", id).page(new Page<>(current, SystemConstants.MAX_PAGE_SIZE));
+        List<Blog> records = page.getRecords();
+        return Result.ok(records);
+    }
+    @GetMapping("/of/follow")
+    public Result queryBlogOfFollow(@RequestParam("lastId") Long max,
+                                    @RequestParam(value = "offset", defaultValue = "0") Integer offset) {
+        return blogService.queryBlogOfFollow(max, offset);
     }
 }

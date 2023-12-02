@@ -7,16 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.song.dto.Result;
 import com.song.entity.Shop;
 import com.song.service.IShopService;
+import com.song.service.IUserService;
 import com.song.utils.SystemConstants;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
-import java.util.concurrent.TimeUnit;
-
-import static com.song.utils.RedisConstants.CACHE_SHOP_KEY;
-import static com.song.utils.RedisConstants.CACHE_SHOP_TTL;
 
 
 @RestController
@@ -25,9 +21,10 @@ public class ShopController {
 
     @Resource
     public IShopService shopService;
-
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private IUserService userService;
 
     /**
      * 根据id查询商铺信息
@@ -76,6 +73,12 @@ public class ShopController {
      */
     @GetMapping("/of/type")
     public Result queryShopByType(
+//            @RequestParam("typeId") Integer typeId,
+//            @RequestParam(value = "current", defaultValue = "1") Integer current,
+//            @RequestParam(value = "x", required = false) Double x,
+//            @RequestParam(value = "y", required = false) Double y
+//    ) {
+//        return shopService.queryShopByType(typeId, current, x, y);
             @RequestParam("typeId") Integer typeId,
             @RequestParam(value = "current", defaultValue = "1") Integer current
     ) {
@@ -105,5 +108,10 @@ public class ShopController {
                 .page(new Page<>(current, SystemConstants.MAX_PAGE_SIZE));
         // 返回数据
         return Result.ok(page.getRecords());
+    }
+    @PostMapping("/sign")
+    public Result sign() {
+        return userService.sign();
+
     }
 }

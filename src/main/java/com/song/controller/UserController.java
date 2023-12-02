@@ -117,4 +117,9 @@ public class UserController {
         List<Blog> records = page.getRecords();
         return Result.ok(records);
     }
+
+    @GetMapping("/sign/count")
+    public Result signCount() {
+        return userService.signCount();
+    }
 }
