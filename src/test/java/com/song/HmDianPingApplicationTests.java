@@ -3,7 +3,8 @@ package com.song;
 import com.song.entity.Shop;
 import com.song.service.IShopService;
 import com.song.utils.UniqueIDGenerator;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.StringRedisTemplate;
