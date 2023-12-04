@@ -20,6 +20,7 @@ import org.redisson.api.IdGenerator;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,11 +45,11 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     @Resource
     private UniqueIDGenerator idGenerator;
     @Resource
-    private RedissonClient redissonClient;
-    @Resource
     private StringRedisTemplate stringRedisTemplate;
-//    @Resource
-//    private RabbitTemplate rabbitTemplate;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+    @Resource
+    private RedissonClient redissonClient;
 
     private static final DefaultRedisScript<Long> SECKILL_SCRIPT;
 
@@ -59,67 +60,70 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     }
 
 
-    //  @Override
-    //no need to apply the @Transactional annotation since it's only a query
+    @Override
+    // no need to apply the @Transactional annotation since it's only a query
+    public Result seckillVoucher(Long voucherId) {
+        //Long id = UserHolder.getUser().getId();
+        Long userId = UserHolder.getUser().getId();
+        long orderId = idGenerator.nextId("order");
+        // 1. execute lua script
+      //  Long result = stringRedisTemplate.execute(SECKILL_SCRIPT, Collections.emptyList(), voucherId.toString(), userId.toString());
+        Long result = stringRedisTemplate.execute(SECKILL_SCRIPT,
+                Collections.emptyList(), voucherId.toString(),
+                UserHolder.getUser().getId().toString(), String.valueOf(orderId));
+        assert result != null;
+        int r = result.intValue();
+        // 2. check if return value is 0
+
+        if (r != 0) {
+            // 2.1 if not, can't buy the voucher
+            return Result.fail(r == 1 ? "The voucher amount is not enough" : "u have already bought this voucher");
+
+        }
+        // 2.2 if yes, can buy the voucher, save the order to queue
+        // TODO save the order to queue
+        VoucherOrder voucherOrder = new VoucherOrder();
+        voucherOrder.setId(orderId);
+        voucherOrder.setUserId(userId);
+        voucherOrder.setVoucherId(voucherId);
+        rabbitTemplate.convertAndSend(SECKILL_VOUCHER_SAVE_QUEUE, voucherOrder);
+        log.info("send seckill voucher order to queue: {}", orderId);
+
+        // 3. return the result
+        return Result.ok("success");
+
+    }
+
+
+//    @Override
 //    public Result seckillVoucher(Long voucherId) {
-//        //Long id = UserHolder.getUser().getId();
-//        Long userId = UserHolder.getUser().getId();
-//        long orderId = idGenerator.nextId("order");
-//        // 1. execute lua script
-//        Long result = stringRedisTemplate.execute(SECKILL_SCRIPT, Collections.emptyList(), voucherId.toString(), userId.toString());
-//        assert result != null;
-//        int r = result.intValue();
-//        // 2. check if return value is 0
-//
-//        if (r != 0) {
-//            // 2.1 if not, can't buy the voucher
-//            return Result.fail(r == 1 ? "The voucher amount is not enough" : "u have already bought this voucher");
-//
+//        // 1. check if the voucher exists
+//        SeckillVoucher voucher = seckillVoucherService.getById(voucherId);
+//        // 2. check if the voucher is available
+//        if (voucher.getBeginTime().isAfter(LocalDateTime.now())) {
+//            return Result.fail("the voucher is not available yet");
 //        }
-//        //
-//        // 2.2 if yes, can buy the voucher, save the order to queue
-//        // TODO save the order to queue
-//        VoucherOrder voucherOrder = new VoucherOrder();
-//        voucherOrder.setId(orderId);
-//        voucherOrder.setUserId(userId);
-//        voucherOrder.setVoucherId(voucherId);
-//        rabbitTemplate.convertAndSend(SECKILL_VOUCHER_SAVE_QUEUE, voucherOrder);
-//        log.info("send seckill voucher order to queue: {}", orderId);
-//
-//        // 3. return the result
-//        return Result.ok("success");
-//
+//        if (voucher.getEndTime().isBefore(LocalDateTime.now())) {
+//            return Result.fail("the voucher is not available anymore");
+//        }
+//        if (voucher.getStock() < 1) {
+//            return Result.fail("the voucher is sold out");
+//        }
+//        Long userId = UserHolder.getUser().getId();
+//        RLock lock = redissonClient.getLock("lock:order:" + userId);
+//        // get the lock
+//        boolean isLock = lock.tryLock();
+//        if (!isLock) {
+//            return Result.fail("The system is busy, please try again later");
+//        }
+//        try {
+//            IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
+//            return proxy.createVoucherOrder(voucherId);
+//        } finally {
+//            lock.unlock();
+//        }
 //    }
 
-
-    @Override
-    public Result seckillVoucher(Long voucherId) {
-        // 1. check if the voucher exists
-        SeckillVoucher voucher = seckillVoucherService.getById(voucherId);
-        // 2. check if the voucher is available
-        if (voucher.getBeginTime().isAfter(LocalDateTime.now())) {
-            return Result.fail("the voucher is not available yet");
-        }
-        if (voucher.getEndTime().isBefore(LocalDateTime.now())) {
-            return Result.fail("the voucher is not available anymore");
-        }
-        if (voucher.getStock() < 1) {
-            return Result.fail("the voucher is sold out");
-        }
-        Long userId = UserHolder.getUser().getId();
-        RLock lock = redissonClient.getLock("lock:order:" + userId);
-        // get the lock
-        boolean isLock = lock.tryLock();
-        if (!isLock) {
-            return Result.fail("The system is busy, please try again later");
-        }
-        try {
-            IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
-            return proxy.createVoucherOrder(voucherId);
-        } finally {
-            lock.unlock();
-        }
-    }
 
     @Transactional // begin transaction
     public Result createVoucherOrder(Long voucherId) {
