@@ -16,6 +16,7 @@
 - **Framework**: Vue 2
 - **UI Library**: Element-UI
 - **HTTP Client**: Axios
+- **Web Server**: Nginx
 
 ## Key Features
 
