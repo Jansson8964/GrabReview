@@ -9,7 +9,7 @@
 - **Messaging**: RabbitMQ
 - **Utilities**: Hutool
 - **Containerization**: Docker
-- **Testing**:Junit, Jmeter
+- **Testing**: Junit, Jmeter
 
 ### Frontend
 
