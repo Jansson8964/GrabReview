@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   <title>Yelp</title>
-  <!-- 引入样式 -->
+  <!-- Importing styles -->
   <link rel="stylesheet" href="./css/element.css">
 
   <link href="./css/shop-list.css" rel="stylesheet">
@@ -37,13 +37,13 @@
       </el-dropdown>
     </div>
     <div class="sort-item" @click="sortAndQuery('')">
-      距离 <i class="el-icon-arrow-down el-icon--right"></i>
+      Distance <i class="el-icon-arrow-down el-icon--right"></i>
     </div>
     <div class="sort-item" @click="sortAndQuery('comments')">
-      人气 <i class="el-icon-arrow-down el-icon--right"></i>
+      Popularity <i class="el-icon-arrow-down el-icon--right"></i>
     </div>
     <div class="sort-item" @click="sortAndQuery('score')">
-      评分 <i class="el-icon-arrow-down el-icon--right"></i>
+      Rating <i class="el-icon-arrow-down el-icon--right"></i>
     </div>
   </div>
   <div class="shop-list" @scroll="onScroll">
@@ -53,17 +53,17 @@
         <div class="shop-title shop-item">{{s.name}}</div>
         <div class="shop-rate shop-item" >
           <el-rate
-              disabled v-model="s.score/10"
-              text-color="#F63"
-              show-score
+                  disabled v-model="s.score/10"
+                  text-color="#F63"
+                  show-score
           ></el-rate>
-          <span>{{s.comments}}条</span>
+          <span>{{s.comments}} reviews</span>
         </div>
         <div class="shop-area shop-item">
           <span>{{s.area}}</span>
           <span v-if="s.distance">{{s.distance < 1000 ? s.distance.toFixed(1) + 'm' : (s.distance/1000).toFixed(1) + 'km'}}</span>
         </div>
-        <div class="shop-avg shop-item">￥{{s.avgPrice}}/人</div>
+        <div class="shop-avg shop-item">Average Price: ${{s.avgPrice}}/person</div>
         <div class="shop-address shop-item">
           <i class="el-icon-map-location"></i>
           <span>{{s.address}}</span>
@@ -74,7 +74,7 @@
 </div>
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
-<!-- 引入组件库 -->
+<!-- Importing component library -->
 <script src="./js/element.js"></script>
 <script src="./js/common.js"></script>
 <script>
@@ -84,52 +84,52 @@
     data: {
       util,
       isReachBottom: false,
-      types: [], // 类型列表
-      shops: [], // 商店列表
+      types: [], // Type list
+      shops: [], // Shop list
       typeName: "",
       params:{
         typeId: 0,
         current: 1,
         sortBy: "",
-        x: 120.149993, // 经度
-        y: 30.334229 // 纬度
+        x: 120.149993, // Longitude
+        y: 30.334229 // Latitude
       }
     },
     created() {
-      // 获取参数
+      // Get parameters
       this.params.typeId = util.getUrlParam("type");
       this.typeName = util.getUrlParam("name");
-      // 查询类型
+      // Query types
       this.queryTypes();
-      // 查询商店
+      // Query shops
       this.queryShops();
     },
     methods: {
       queryTypes() {
         axios.get("/shop-type/list")
-          .then(({data}) => {
-            this.types = data;
-          })
-          .catch(err => {
-            console.log(err);
-            this.$message.error(err)
-          })
+                .then(({data}) => {
+                  this.types = data;
+                })
+                .catch(err => {
+                  console.log(err);
+                  this.$message.error(err)
+                })
       },
       queryShops() {
         axios.get("/shop/of/type", {
-            params: this.params
-          })
-          .then(({data}) => {
-            if (!data) {
-              return
-            }
-            data.forEach(s => s.images = s.images.split(',')[0]);
-            this.shops = this.shops.concat(data);
-          })
-          .catch(err => {
-            console.log(err);
-            this.$message.error(err)
-          })
+          params: this.params
+        })
+                .then(({data}) => {
+                  if (!data) {
+                    return
+                  }
+                  data.forEach(s => s.images = s.images.split(',')[0]);
+                  this.shops = this.shops.concat(data);
+                })
+                .catch(err => {
+                  console.log(err);
+                  this.$message.error(err)
+                })
       },
       handleCommand(t) {
         location.href = "/shop-list.html?type="+t.id+"&name="+t.name;
@@ -150,7 +150,7 @@
         let scrollHeight = e.target.scrollHeight;
         if(scrollTop + offsetHeight + 1 > scrollHeight && !this.isReachBottom){
           this.isReachBottom = true
-          console.log("触底")
+          console.log("Bottom reached")
           this.params.current++
           this.queryShops(this.params.current, 5);
         }else{

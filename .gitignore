@@ -36,3 +36,6 @@ build/
 /src/main/resources/frontend-nginx/nginx-1.18.0/html/Yelp/js/axios.min.js
 /src/main/resources/frontend-nginx/nginx-1.18.0/html/Yelp/js/element.js
 /src/main/resources/frontend-nginx/nginx-1.18.0/html/Yelp/js/vue.js
+
+#nginx
+/src/main/resources/frontend-nginx/nginx-1.18.0/logs/
