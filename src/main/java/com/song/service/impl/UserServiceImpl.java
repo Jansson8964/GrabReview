@@ -8,6 +8,7 @@ import com.song.dto.Result;
 import com.song.dto.UserDTO;
 import com.song.entity.User;
 import com.song.mapper.UserMapper;
+import com.song.service.IEmailService;
 import com.song.service.IUserService;
 import com.song.utils.RegexUtils;
 import com.song.utils.UserHolder;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+
 import static com.song.utils.RedisConstants.*;
 import static com.song.utils.RedisConstants.LOGIN_USER_TTL;
 import static com.song.utils.SystemConstants.USER_NICK_NAME_PREFIX;
@@ -37,20 +39,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private StringRedisTemplate stringRedisTemplate;
     @Resource
     private IUserService userService;
+    @Resource
+    private IEmailService emailService;
 
     @Override
     public Result sendCode(String phone, HttpSession session) {
-        // 1. validate phone
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        // 1. validate email
+        if (RegexUtils.isEmailInvalid(phone)) {
             // 2. if phone is invalid, return error message
-            return Result.fail("phone is invalid");
+            return Result.fail("email is invalid");
         }
-        // 3.if phone is valid, send 6-digit code to phone
-        String code = RandomUtil.randomNumbers(6);
+        // 3.if email(phone)is valid, generate a 6-digit code
+        //String code = RandomUtil.randomNumbers(6);
+        String code = emailService.generateVerificationCode();
+
         // 4. save code to redis, key is telephone number
         // StringRedisTemplate is used to save string
         // phone is key, code is value, expire time is 2 minutes
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        // 4. send email with the code
+        String emailContent = "Welcome to Song Yang's App, your verification code is: " + code;
+        emailService.sendEmail(phone, "Verification Code", emailContent);
         // 5. send code to phone
         log.debug("success to send code,code: {}", code);
         // 6. return success message
@@ -62,9 +71,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // implement login logic
         // 1. validate phone
         String phone = loginForm.getPhone();
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        if (RegexUtils.isEmailInvalid(phone)) {
             // 2. if phone is invalid, return error message
-            return Result.fail("phone is invalid");
+            return Result.fail("email is invalid");
         }
         // 3. validate code
         String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);

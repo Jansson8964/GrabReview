@@ -18,12 +18,12 @@
   <div class="login-container">
     <div class="header">
       <div class="header-back-btn" @click="goBack" ><i class="el-icon-arrow-left"></i></div>
-      <div class="header-title">Quick Login with Mobile Number&nbsp;&nbsp;&nbsp;</div>
+      <div class="header-title">Quick Login with email&nbsp;&nbsp;&nbsp;</div>
     </div>
     <div class="content">
       <div class="login-form">
         <div style="display: flex; justify-content: space-between">
-          <el-input style="width: 60%" placeholder="Enter Mobile Number" v-model="form.phone" >
+          <el-input style="width: 60%" placeholder="Enter email" v-model="form.phone" >
           </el-input>
           <el-button style="width: 38%" @click="sendCode" type="success" :disabled="disabled">{{codeBtnMsg}}</el-button>
         </div>
