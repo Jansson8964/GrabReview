@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import static com.song.utils.RedisConstants.*;
 
 @Service
-public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IShopService {
+public class  ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IShopService {
     StringRedisTemplate stringRedisTemplate;
 
     public ShopServiceImpl(StringRedisTemplate stringRedisTemplate) {

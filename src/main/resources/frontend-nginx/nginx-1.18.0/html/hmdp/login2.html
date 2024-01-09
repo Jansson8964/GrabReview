@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   <title>Yelp</title>
   <link href="./css/login.css" rel="stylesheet">
-  <!-- 引入样式 -->
+  <!-- Importing styles -->
   <link rel="stylesheet" href="./css/element.css">
 
   <style type="text/css">
-      .el-radio__input.is-checked .el-radio__inner {
-          border-color: #F63;
-          background: #F63;
-      }
-      .el-input__inner:focus {
-          border: 1px solid #F63;
-      }
+    .el-radio__input.is-checked .el-radio__inner {
+      border-color: #F63;
+      background: #F63;
+    }
+    .el-input__inner:focus {
+      border: 1px solid #F63;
+    }
   </style>
 </head>
 <body>
@@ -23,28 +23,27 @@
   <div class="login-container">
     <div class="header">
       <div class="header-back-btn" @click="goBack"><i class="el-icon-arrow-left"></i></div>
-      <div class="header-title">密码登录&nbsp;&nbsp;&nbsp;</div>
+      <div class="header-title">Password Login&nbsp;&nbsp;&nbsp;</div>
     </div>
     <div class="content">
       <div class="login-form">
-        <el-input placeholder="请输入手机号" v-model="form.phone">
+        <el-input placeholder="Enter Mobile Number" v-model="form.phone">
         </el-input>
         <div style="height: 5px"></div>
-        <el-input placeholder="请输入密码" v-model="form.password">
+        <el-input placeholder="Enter Password" v-model="form.password">
         </el-input>
-        <div style="text-align: center; color: #8c939d;margin: 5px 0"><a href="javascript:void(0)">忘记密码</a></div>
-        <el-button @click="login" style="width: 100%; background-color:#f63; color: #fff;">登录</el-button>
-        <div style="text-align: right; color:#333333; margin: 5px 0"><a href="/login.html">验证码登录</a></div>
+        <div style="text-align: center; color: #8c939d;margin: 5px 0"><a href="javascript:void(0)">Forgot Password</a></div>
+        <el-button @click="login" style="width: 100%; background-color:#f63; color: #fff;">Login</el-button>
+        <div style="text-align: right; color:#333333; margin: 5px 0"><a href="/login.html">Verification Code Login</a></div>
       </div>
       <div class="login-radio">
         <div>
           <input type="radio" name="readed" v-model="radio" value="1">
-          <label for="readed"></label>
         </div>
-        <div>我已阅读并同意
+        <div>I have read and agree to
           <a href="javascript:void(0)">
-          《Yelp用户服务协议》</a>、
-          <a href="javascript:void(0)">《隐私政策》</a>
+            "Yelp User Service Agreement"</a>,
+          <a href="javascript:void(0)">"Privacy Policy"</a>
         </div>
       </div>
     </div>
@@ -52,7 +51,7 @@
 </div>
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
-<!-- 引入组件库 -->
+<!-- Importing component library -->
 <script src="./js/element.js"></script>
 <script src="./js/common.js"></script>
 <script>
@@ -67,19 +66,19 @@
     methods: {
       login(){
         if(!this.radio){
-          this.$message.error("请先确认阅读用户协议！");
+          this.$message.error("Please confirm reading the user agreement first!");
           return;
         }
         axios.post("/user/login", this.form)
-          .then(({data}) => {
-            if(data){
-              // 保存用户信息到session
-              sessionStorage.setItem("token", data);
-            }
-            // 跳转到首页
-            location.href = "/info.html"
-          })
-          .catch(err => this.$message.error(err))
+                .then(({data}) => {
+                  if(data){
+                    // Save user information to session
+                    sessionStorage.setItem("token", data);
+                  }
+                  // Redirect to homepage
+                  location.href = "/info.html"
+                })
+                .catch(err => this.$message.error(err))
       },
       goBack(){
         history.back();

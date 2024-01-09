@@ -43,7 +43,7 @@
   </div>
   <div class="divider"></div>
   <div class="blog-shop" @click="showDialog=true">
-    <div class="shop-left">Associated Shops</div>
+    <div class="shop-left">Associated Places</div>
     <div v-if="selectedShop.name">{{selectedShop.name}}</div>
     <div v-else>choose&nbsp;<i class="el-icon-arrow-right"></i></div>
   </div>
@@ -52,7 +52,7 @@
   <transition name="el-zoom-in-bottom">
     <div class="shop-dialog" v-show="showDialog">
       <div class="blog-shop">
-        <div class="shop-left">Associated Shops</div>
+        <div class="shop-left">Associated Places</div>
       </div>
       <div class="search-bar">
         <div class="city-select">Limerick <i class="el-icon-arrow-down"></i></div>
