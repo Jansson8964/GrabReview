@@ -125,10 +125,11 @@
         };
         axios
           .post("/upload/blog", formData, config)
-          .then(({data}) => this.fileList.push('/imgs' + data))
+       //   .then(({data}) => this.fileList.push('/imgs' + data))
+          .then(({data}) => this.fileList.push(data))
           .catch(this.$message.error);
       },
-      deletePic(i) {
+      deletePic(i) {1
         axios.get("/upload/blog/delete?name=" + this.fileList[i])
           .then(() => this.fileList.splice(i, 1))
           .catch(this.$message.error)
