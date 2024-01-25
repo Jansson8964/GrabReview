@@ -108,7 +108,7 @@
                     <div class="comment-info">
                         <div class="comment-user">XiJinPing <span>Lv5</span></div>
                         <div style="display: flex;">
-                            scored
+                            score
                             <el-rate disabled v-model="4.5"></el-rate>
                         </div>
                         <div style="padding: 5px 0; font-size: 14px">
@@ -260,13 +260,15 @@
             follow() {
                 axios.put("/follow/" + this.blog.userId + "/" + !this.followed)
                     .then(() => {
-                        this.$message.success(this.followed ? "已取消关注" : "已关注")
+                        this.$message.success(this.followed ? "Unfollowed" : "Followed")
                         this.followed = !this.followed
                     })
                     .catch(this.$message.error)
             },
             formatTime(b) {
-                return b.getFullYear() + "年" + (b.getMonth() + 1) + "月" + b.getDate() + "日 ";
+              //  return b.getFullYear() + "年" + (b.getMonth() + 1) + "月" + b.getDate() + "日 ";
+               //   return b.getFullYear() + "-" + (b.getMonth() + 1) + "-" + b.getDate();
+                return b.getDate() + "/" + (b.getMonth() + 1) + "/" + b.getFullYear();
             },
             formatMinutes(m) {
                 if (m < 10) m = "0" + m

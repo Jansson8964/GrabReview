@@ -73,11 +73,11 @@
       <div class="voucher-left">
         <div class="voucher-title">{{v.title}}</div>
         <div class="voucher-subtitle">{{v.subTitle}}</div>
-        <div class="voucher-price"><div>€ {{util.formatPrice(v.payValue)}}</div>  <span>{{(v.payValue*10)/v.actualValue}}折</span></div>
+        <div class="voucher-price"><div>€ {{util.formatPrice(v.payValue)}}</div>  <span>{{(v.payValue*10*10)/v.actualValue}}% off</span></div>
       </div>
       <div class="voucher-right">
         <div v-if="v.type" class="seckill-box">
-          <div class="voucher-btn" :class="{'disable-btn': isNotBegin(v) || v.stock < 1}" @click="seckill(v)">Limited Time Grab</div>
+          <div class="voucher-btn" :class="{'disable-btn': isNotBegin(v) || v.stock < 1}" @click="seckill(v)">Grab</div>
           <div class="seckill-stock">Remaining <span>{{v.stock}}</span> pieces</div>
           <div class="seckill-time">{{formatTime(v)}}</div>
         </div>
@@ -92,7 +92,7 @@
       <div><i class="el-icon-arrow-right"></i></div>
     </div>
     <div class="comment-tags">
-      <div class="tag">Nicee(19)</div>
+      <div class="tag">Nicee(10)</div>
 <!--      <div class="tag">牛肉赞(16)</div>-->
 <!--      <div class="tag">菜品不错(11)</div>-->
 <!--      <div class="tag">回头客(4)</div>-->
@@ -105,10 +105,10 @@
     <div class="comment-list">
       <div class="comment-box" v-for="i in 3" :key="i">
         <div class="comment-icon">
-          <img src="https://p0.meituan.net/userheadpicbackend/57e44d6eba01aad0d8d711788f30a126549507.jpg%4048w_48h_1e_1c_1l%7Cwatermark%3D0" alt="">
+          <img src="https://songs-project.s3.eu-west-1.amazonaws.com/Icon/dog.jpeg" alt="">
         </div>
         <div class="comment-info">
-          <div class="comment-user">Tim <span>Lv5</span></div>
+          <div class="comment-user">Song<span>Lv5</span></div>
           <div style="display: flex;">
             Scored
             <el-rate disabled v-model="4.5" ></el-rate>
@@ -117,13 +117,13 @@
             Wow,that's nice!
           </div>
           <div class="comment-images">
-            <img src="https://qcloud.dpfile.com/pc/6T7MfXzx7USPIkSy7jzm40qZSmlHUF2jd-FZUL6WpjE9byagjLlrseWxnl1LcbuSGybIjx5eX6WNgCPvcASYAw.jpg" alt="">
-            <img src="https://qcloud.dpfile.com/pc/sZ5q-zgglv4VXEWU71xCFjnLM_jUHq-ylq0GKivtrz3JksWQ1f7oBWZsxm1DWgcaGybIjx5eX6WNgCPvcASYAw.jpg" alt="">
-            <img src="https://qcloud.dpfile.com/pc/xZy6W4NwuRFchlOi43DVLPFsx7KWWvPqifE1JTe_jreqdsBYA9CFkeSm2ZlF0OVmGybIjx5eX6WNgCPvcASYAw.jpg" alt="">
-            <img src="https://qcloud.dpfile.com/pc/xZy6W4NwuRFchlOi43DVLPFsx7KWWvPqifE1JTe_jreqdsBYA9CFkeSm2ZlF0OVmGybIjx5eX6WNgCPvcASYAw.jpg" alt="">
+            <img src="https://songs-project.s3.eu-west-1.amazonaws.com/AWS_S3/img_1202_720.jpg" alt="">
+            <img src="https://songs-project.s3.eu-west-1.amazonaws.com/AWS_S3/img_1262_720.jpg" alt="">
+<!--            <img src="https://qcloud.dpfile.com/pc/xZy6W4NwuRFchlOi43DVLPFsx7KWWvPqifE1JTe_jreqdsBYA9CFkeSm2ZlF0OVmGybIjx5eX6WNgCPvcASYAw.jpg" alt="">-->
+<!--            <img src="https://qcloud.dpfile.com/pc/xZy6W4NwuRFchlOi43DVLPFsx7KWWvPqifE1JTe_jreqdsBYA9CFkeSm2ZlF0OVmGybIjx5eX6WNgCPvcASYAw.jpg" alt="">-->
           </div>
           <div>
-            Views: 641      Comments: 5
+            Views: 10     Comments: 5
           </div>
         </div>
       </div>
