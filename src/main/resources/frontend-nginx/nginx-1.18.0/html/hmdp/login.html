@@ -37,7 +37,7 @@
       </div>
       <div class="login-radio">
         <div>
-          <input type="radio" name="readed" v-model="radio" value="1">
+          <input type="radio" name="readed" v-model="radio" value="1"  checked>
           <label for="readed"></label>
         </div>
         <div>I have read and agree to
@@ -60,9 +60,9 @@
   const app = new Vue({
     el: "#app",
     data: {
-      radio: "",
+      radio: "1",
       disabled: false, // Button to send SMS
-      codeBtnMsg: "Send Verification Code", // SMS button text
+      codeBtnMsg: "Send Code", // SMS button text
       form:{
       }
     },
