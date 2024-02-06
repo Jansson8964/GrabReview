@@ -1,4 +1,4 @@
-# MyYelp
+# GrabReview
 ## Technical Stack
 
 ### Backend
